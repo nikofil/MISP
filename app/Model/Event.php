@@ -483,6 +483,16 @@ class Event extends AppModel
                 $pubSubTool->event_save($event, $created ? 'add' : 'edit');
             }
         }
+        if (empty($this->data['Event']['unpublishAction']) && empty($this->data['Event']['skip_zmq']) && Configure::read('Plugin.ActiveMQ_enable')) {
+            $uri = Configure::read('Plugin.ActiveMQ_uri');
+            $username = Configure::read('Plugin.ActiveMQ_username');
+            $password = Configure::read('Plugin.ActiveMQ_password');
+            $topic = Configure::read('Plugin.ActiveMQ_topic');
+            $event = $this->quickFetchEvent($this->data['Event']['id']);
+            if (!empty($event)) {
+                $this->publishToActiveMQ($event, $created ? 'add' : 'edit', $uri, $username, $password, $topic);
+            }
+        }
     }
 
     public function buildEventConditions($user)

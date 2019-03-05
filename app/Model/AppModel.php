@@ -1506,6 +1506,16 @@ class AppModel extends Model
         return $redis;
     }
 
+    public function publishToActiveMQ($data, $action, $uri, $username, $password, $topic) {
+        App::uses('ActiveMQPubTool', 'Tools');
+        if (!empty($action)) {
+            $data['action'] = $action;
+        }
+        $body = json_encode($data, JSON_PRETTY_PRINT);
+        $amqTool = new ActiveMQPubTool();
+        $amqTool->publish($body, $uri, $username, $password, $topic);
+    }
+
     public function getPubSubTool()
     {
         if (!$this->loadedPubSubTool) {

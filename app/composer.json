@@ -6,6 +6,7 @@
     },
     "suggest": {
         "elasticsearch/elasticsearch": "For logging to elasticsearch",
+        "stomp-php/stomp-php": "For sending events to ActiveMQ",
         "aws/aws-sdk-php": "To upload samples to S3"
     }
 }
